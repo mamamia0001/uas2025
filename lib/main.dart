@@ -9,8 +9,6 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -24,8 +22,6 @@ class MyApp extends StatelessWidget {
 }
 
 class PokemonListPage extends StatefulWidget {
-  const PokemonListPage({super.key});
-
   @override
   _PokemonListPageState createState() => _PokemonListPageState();
 }
@@ -40,7 +36,7 @@ class _PokemonListPageState extends State<PokemonListPage> {
   }
 
   Future<void> fetchPokemonList() async {
-    final response = await http.get(Uri.parse('https://pokeapi.co/api/v2/pokemon'));
+    final response = await http.get(Uri.parse('https://pokeapi.co/api/v2/pokemon?limit=10'));
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
@@ -77,38 +73,57 @@ class _PokemonListPageState extends State<PokemonListPage> {
         title: const Text('Pokemon List'),
         backgroundColor: Colors.grey,
       ),
-      body: ListView.builder(
-        itemCount: _pokemonList.length,
-        itemBuilder: (context, index) {
-          return ListTile(
-            title: Text(_pokemonList[index]['name']),
-            trailing: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                IconButton(
-                  icon: const Icon(Icons.edit),
-                  onPressed: () async {
-                    final result = await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => EditPokemon(
-                          initialName: _pokemonList[index]['name'],
-                        ),
-                      ),
-                    );
-                    if (result != null) {
-                      editPokemon(index, result);
-                    }
-                  },
+      body: Center(
+        child: Container(
+          margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.5),
+                spreadRadius: 5,
+                blurRadius: 7,
+                offset: const Offset(0, 3),
+              ),
+            ],
+          ),
+          child: ListView.builder(
+            shrinkWrap: true,
+            itemCount: _pokemonList.length,
+            itemBuilder: (context, index) {
+              return ListTile(
+                title: Text(_pokemonList[index]['name']),
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.edit),
+                      onPressed: () async {
+                        final result = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => EditPokemon(
+                              initialName: _pokemonList[index]['name'],
+                            ),
+                          ),
+                        );
+                        if (result != null) {
+                          editPokemon(index, result);
+                        }
+                      },
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.delete, color: Colors.red),
+                      onPressed: () => deletePokemon(index),
+                    ),
+                  ],
                 ),
-                IconButton(
-                  icon: const Icon(Icons.delete, color: Colors.red),
-                  onPressed: () => deletePokemon(index),
-                ),
-              ],
-            ),
-          );
-        },
+              );
+            },
+          ),
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
@@ -125,4 +140,3 @@ class _PokemonListPageState extends State<PokemonListPage> {
     );
   }
 }
-

@@ -11,25 +11,26 @@ class EditPokemon extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Edit Pokémon'),
+        title: const Text('Edit Pokemon'),
         backgroundColor: Colors.grey,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(20.0),
         child: Column(
           children: [
             TextField(
               controller: _controller,
-              decoration: InputDecoration(labelText: 'Nama Pokémon'),
+              decoration: const InputDecoration(
+                labelText: 'Nama Pokemon Baru',
+                border: OutlineInputBorder(),
+              ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                if (_controller.text.isNotEmpty) {
-                  Navigator.pop(context, _controller.text);
-                }
+                Navigator.pop(context, _controller.text);
               },
-              child: Text('Simpan'),
+              child: const Text('Simpan'),
             ),
           ],
         ),

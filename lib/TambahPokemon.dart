@@ -7,25 +7,26 @@ class TambahPokemon extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Tambah Pokémon'),
+        title: const Text('Tambah Pokemon'),
         backgroundColor: Colors.grey,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(20.0),
         child: Column(
           children: [
             TextField(
               controller: _controller,
-              decoration: InputDecoration(labelText: 'Nama Pokémon'),
+              decoration: const InputDecoration(
+                labelText: 'Nama Pokemon',
+                border: OutlineInputBorder(),
+              ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                if (_controller.text.isNotEmpty) {
-                  Navigator.pop(context, _controller.text);
-                }
+                Navigator.pop(context, _controller.text);
               },
-              child: Text('Tambah'),
+              child: const Text('Tambah'),
             ),
           ],
         ),
