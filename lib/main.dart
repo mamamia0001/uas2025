@@ -9,6 +9,8 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -22,6 +24,8 @@ class MyApp extends StatelessWidget {
 }
 
 class PokemonListPage extends StatefulWidget {
+  const PokemonListPage({super.key});
+
   @override
   _PokemonListPageState createState() => _PokemonListPageState();
 }
@@ -70,7 +74,7 @@ class _PokemonListPageState extends State<PokemonListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Pokemon List'),
+        title: const Text('Pokemon List'),
         backgroundColor: Colors.grey,
       ),
       body: ListView.builder(
@@ -82,7 +86,7 @@ class _PokemonListPageState extends State<PokemonListPage> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 IconButton(
-                  icon: Icon(Icons.edit),
+                  icon: const Icon(Icons.edit),
                   onPressed: () async {
                     final result = await Navigator.push(
                       context,
@@ -98,7 +102,7 @@ class _PokemonListPageState extends State<PokemonListPage> {
                   },
                 ),
                 IconButton(
-                  icon: Icon(Icons.delete, color: Colors.red),
+                  icon: const Icon(Icons.delete, color: Colors.red),
                   onPressed: () => deletePokemon(index),
                 ),
               ],
@@ -107,7 +111,7 @@ class _PokemonListPageState extends State<PokemonListPage> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
         onPressed: () async {
           final result = await Navigator.push(
             context,
