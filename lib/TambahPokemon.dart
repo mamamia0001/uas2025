@@ -7,8 +7,12 @@ class TambahPokemon extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Tambah Pokemon'),
-        backgroundColor: Colors.grey,
+        title: const Text('Tambah Pokemon',
+        style: TextStyle(
+          color: Color.fromARGB(255, 255, 255, 255)
+        ),
+        ),
+        backgroundColor: const Color.fromARGB(255, 129, 19, 255),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -26,7 +30,13 @@ class TambahPokemon extends StatelessWidget {
               onPressed: () {
                 Navigator.pop(context, _controller.text);
               },
-              child: const Text('Tambah'),
+              child: const Text(
+                'Tambah',
+                style: TextStyle(
+                  color: Color.fromARGB(255, 0, 0, 0),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
           ],
         ),

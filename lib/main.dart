@@ -9,6 +9,8 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -22,6 +24,8 @@ class MyApp extends StatelessWidget {
 }
 
 class PokemonListPage extends StatefulWidget {
+  const PokemonListPage({super.key});
+
   @override
   _PokemonListPageState createState() => _PokemonListPageState();
 }
@@ -36,7 +40,7 @@ class _PokemonListPageState extends State<PokemonListPage> {
   }
 
   Future<void> fetchPokemonList() async {
-    final response = await http.get(Uri.parse('https://pokeapi.co/api/v2/pokemon?limit=10'));
+    final response = await http.get(Uri.parse('https://pokeapi.co/api/v2/pokemon'));
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
@@ -71,71 +75,92 @@ class _PokemonListPageState extends State<PokemonListPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Pokemon List'),
-        backgroundColor: Colors.grey,
+        backgroundColor: const Color.fromARGB(255, 255, 230, 9),
       ),
       body: Center(
         child: Container(
-          margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+          width: MediaQuery.of(context).size.width * 0.8, // Responsif: 80% dari lebar layar
+          height: MediaQuery.of(context).size.height * 0.8, // Responsif: 80% dari tinggi layar
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(20),
             boxShadow: [
               BoxShadow(
-                color: Colors.grey.withOpacity(0.5),
-                spreadRadius: 5,
-                blurRadius: 7,
-                offset: const Offset(0, 3),
+                color: Colors.black.withOpacity(0.1),
+                blurRadius: 10,
+                offset: const Offset(0, 5),
               ),
             ],
           ),
-          child: ListView.builder(
-            shrinkWrap: true,
-            itemCount: _pokemonList.length,
-            itemBuilder: (context, index) {
-              return ListTile(
-                title: Text(_pokemonList[index]['name']),
-                trailing: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.edit),
-                      onPressed: () async {
-                        final result = await Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => EditPokemon(
-                              initialName: _pokemonList[index]['name'],
+          child: Column(
+            children: [
+              Expanded(
+                child: ListView.builder(
+                  itemCount: _pokemonList.length,
+                  itemBuilder: (context, index) {
+                    return Container(
+                      margin: const EdgeInsets.symmetric(vertical: 5),
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                      decoration: BoxDecoration(
+                        color: Colors.grey[200],
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            _pokemonList[index]['name'],
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
-                        );
-                        if (result != null) {
-                          editPokemon(index, result);
-                        }
-                      },
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.delete, color: Colors.red),
-                      onPressed: () => deletePokemon(index),
-                    ),
-                  ],
+                          Row(
+                            children: [
+                              IconButton(
+                                icon: const Icon(Icons.edit),
+                                onPressed: () async {
+                                  final result = await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => EditPokemon(
+                                        initialName: _pokemonList[index]['name'],
+                                      ),
+                                    ),
+                                  );
+                                  if (result != null) {
+                                    editPokemon(index, result);
+                                  }
+                                },
+                              ),
+                              IconButton(
+                                icon: const Icon(Icons.delete, color: Colors.red),
+                                onPressed: () => deletePokemon(index),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    );
+                  },
                 ),
-              );
-            },
+              ),
+              FloatingActionButton(
+                onPressed: () async {
+                  final result = await Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => TambahPokemon()),
+                  );
+                  if (result != null) {
+                    addPokemon(result);
+                  }
+                },
+                child: const Icon(Icons.add),
+              ),
+            ],
           ),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.add),
-        onPressed: () async {
-          final result = await Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => TambahPokemon()),
-          );
-          if (result != null) {
-            addPokemon(result);
-          }
-        },
       ),
     );
   }
